@@ -3,28 +3,21 @@ package com.abutua.productbackend.resources;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.abutua.productbackend.models.Product;
 
 @RestController
 public class ProductController {
-    
-    @GetMapping("product")
-    public Product getProduct(){
 
-        Product p = new Product();
+    private List<Product> products = new ArrayList<>();
 
-        p.setId(1);
-        p.setName("Product 01");
-        p.setPrice(100.50);
-        
-        return p;
-    }
-
-    @GetMapping("products")
-    public List<Product> getProducts(){
+    @PostConstruct
+    public void init(){
 
         Product p1 = new Product();
         p1.setId(1);
@@ -41,15 +34,20 @@ public class ProductController {
         p3.setName("Product 03");
         p3.setPrice(300.50);
 
-        List <Product> listProd = new ArrayList<>();
-        
-        listProd.add(p1);
-        listProd.add(p2);
-        listProd.add(p3);
+        products.add(p1);
+        products.add(p2);
+        products.add(p3);
 
+    }
 
-        return listProd;
-        
+    @GetMapping("products/{id}")
+    public Product getProduct(@PathVariable int id){
+        return products.get(id - 1);
+    }
+
+    @GetMapping("products")
+    public List<Product> getProducts(){
+        return products;
     }
 
 
